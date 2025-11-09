@@ -1,15 +1,17 @@
+# .github/workflows/matrix-multi-platform.yml
 name: matrix-multi-platform
 
 on:
   push:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         version: [14, 16, 18]
-    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -24,10 +26,19 @@ jobs:
           node-version: ${{ matrix.version }}
 
       - name: Generate build artifact
-        run: echo "Build output for version ${{ matrix.version }}" > output-${{ matrix.version }}.txt
+        run: |
+          echo "Build output for version ${{ matrix.version }}" > output-${{ matrix.version }}.txt
+          echo "metadata: version=${{ matrix.version }}" > meta-${{ matrix.version }}.txt
+          ls -l output-${{ matrix.version }}.txt meta-${{ matrix.version }}.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
+        with:
+          name: build-6013c26-v${{ matrix.version }}
+          path: |
+            output-${{ matrix.version }}.txt
+            meta-${{ matrix.version }}.txt
+
         with:
           name: build-6013c26-v${{ matrix.version }}
           path: output-${{ matrix.version }}.txt
