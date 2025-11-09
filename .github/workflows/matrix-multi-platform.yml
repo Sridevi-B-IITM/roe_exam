@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: build-6013c26
+      - name: matrix-6013c26
         run: echo "Building for version ${{ matrix.version }}"
 
       - name: Setup Node
