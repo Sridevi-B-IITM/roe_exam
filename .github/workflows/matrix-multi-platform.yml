@@ -29,5 +29,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-d6eb3f0-v${{ matrix.version }}
+          name: build-6013c26-v${{ matrix.version }}
           path: output-${{ matrix.version }}.txt
