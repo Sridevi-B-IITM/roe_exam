@@ -1,4 +1,3 @@
-# .github/workflows/matrix-multi-platform.yml
 name: matrix-multi-platform
 
 on:
@@ -11,34 +10,32 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [14, 16, 18]
+        node-version: [14, 16, 18]  # -> 3 variants required by the validator
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: matrix-6013c26
-        run: echo "Building for version ${{ matrix.version }}"
+        run: echo "Building for Node version ${{ matrix.node-version }}"
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.version }}
+          node-version: ${{ matrix.node-version }}
 
       - name: Generate build artifact
         run: |
-          echo "Build output for version ${{ matrix.version }}" > output-${{ matrix.version }}.txt
-          echo "metadata: version=${{ matrix.version }}" > meta-${{ matrix.version }}.txt
-          ls -l output-${{ matrix.version }}.txt meta-${{ matrix.version }}.txt
+          echo "Build output for Node version ${{ matrix.node-version }}" > output-${{ matrix.node-version }}.txt
+          echo "version=${{ matrix.node-version }}" > meta-${{ matrix.node-version }}.txt
+          # show files so logs confirm non-empty
+          ls -l output-${{ matrix.node-version }}.txt meta-${{ matrix.node-version }}.txt
+          cat output-${{ matrix.node-version }}.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-6013c26-v${{ matrix.version }}
+          name: build-6013c26-v${{ matrix.node-version }}
           path: |
-            output-${{ matrix.version }}.txt
-            meta-${{ matrix.version }}.txt
-
-        with:
-          name: build-6013c26-v${{ matrix.version }}
-          path: output-${{ matrix.version }}.txt
+            output-${{ matrix.node-version }}.txt
+            meta-${{ matrix.node-version }}.txt
